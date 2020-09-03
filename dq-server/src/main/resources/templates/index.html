@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+
+</head>
+
+<body>
+<!-- 头部 -->
+<div class="navbar navbar-fixed-top">
+    <div class="title">延迟队列配置系统</div>
+</div>
+<!-- 主体 -->
+<div class="main">
+    <div class="main_div">
+        <!-- 菜单 -->
+        <div class="select">
+            <div class="tips active" data-page='page_redis'>redis配置</div>
+            <div class="tips" data-page='page_topic_add'>添加topic</div>
+            <div class="tips" data-page='page_topic_list'>topic列表</div>
+            <div class="tips" data-page='page_warning'>警报设置</div>
+        </div>
+        <!-- redis 配置-->
+        <div class="page page_redis" >
+            <div class="list_redis">
+                <table width="100%" class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th style="width: 30%;">配置(host:port:auth)</th>
+                        <th>状态</th>
+                        <th>版本</th>
+                        <th>已用内存</th>
+                        <th>总写入</th>
+                        <th>总消费</th>
+                        <th>总删除</th>
+                        <th>重新配置</th>
+                    </tr>
+                    </thead>
+                    <tbody id="redisList">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+        <!-- 添加 topic-->
+        <div class="page page_topic_add" style="display: none;">
+            <div class="add_topic">
+                <div class="row">
+                    <span class="name">名称</span>
+                    <input class="value" placeholder="请输入名称" />
+                </div>
+                <div class="row">
+                    <span class="name">topic</span>
+                    <input class="value" placeholder="请输入topic" />
+                </div>
+                <div class="row">
+                    <span class="name">延迟时间:(单位秒)</span>
+                    <input class="value" placeholder="请输入延迟时间" />
+                </div>
+                <div class="row">
+                    <span class="name">回调通知url</span>
+                    <input class="value" placeholder="请输入地址" />
+                </div>
+                <div class="row">
+                    <span class="name">重试标记</span>
+                    <input class="value" placeholder="" />
+                </div>
+                <div class="row">
+                    <span class="name">超时时间</span>
+                    <input class="value" placeholder="请输入超时时间" />
+                </div>
+                <div class="row">
+                    <span class="name">异常通知</span>
+                    <input class="value" placeholder="请输入邮箱地址" />
+                </div>
+                <div class="row">
+                    <span class="name">创建人</span>
+                    <input class="value" placeholder="请输入创建人" />
+                </div>
+                <div class="row">
+                    <button onclick="topicAddSubmit()" class="btn" id="topicSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+        <!-- topic 列表 -->
+        <div class="page page_topic_list" style="display: none;">
+            <table width="100%" class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>topic</th>
+                    <th>延迟时间:(单位秒)</th>
+                    <th>回调通知url</th>
+                    <th>重试标记</th>
+                    <th>超时时间</th>
+                    <th>异常通知</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="topicList">
+                </tbody>
+
+            </table>
+        </div>
+        <!-- 警报设置 -->
+        <div class="page page_warning" style="display: none;">
+            <div class="page_warning">
+                <div class="row">
+                    <span class="name">redis宕机通知</span>
+                    <input class="value" placeholder="请输入通知接口地址" />
+                </div>
+                <div class="row">
+                    <button class="btn">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--直接用本地js，修改上线方便-->
+<script>
+    //------------------------------工具类------------------------------
+    //str:原始字符串，index,开始位置,changeStr，改变后的字
+    function changeStr(str,index,changeStr){
+        return str.substr(0, index) + changeStr+ str.substr(index + changeStr.length);
+    }
+
+    //渲染列表数据
+    function dataList(url,rule,obj){
+        //请求数据
+        $.ajax({
+            //请求方式
+            type : "GET",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : url,
+            //请求成功
+            success : function(result) {
+                //请空数据
+                var table = $(obj);
+                table.html("");
+                var list = result.data;
+                for (var i = 0; i < list.length; i++) {
+                    var data = list[i];
+                    //根据规则生成html
+                    var trHTML = '<tr>';
+                    for (var j = 0; j < rule.length; j++) {
+                        var cur = rule[j];
+                        if(cur.type == 0){
+                            trHTML+='<td>'+data[cur.key]+'</td>';
+                        }else {
+                            trHTML+='<td>'+cur.value+'</td>';
+
+                        }
+                    }
+                    trHTML += '</tr>';
+                    table.append(trHTML)
+                }
+
+            }
+        });
+    }
+
+
+    //------------------------------业务提交代码--------------------------
+    function topicAddSubmit(){
+        var rows = $(".add_topic").find('.row');
+        var reqData = {
+            name: rows.eq(0).find('input').val(),
+            topic: rows.eq(1).find('input').val(),
+            delayTime: rows.eq(2).find('input').val(),
+            callBack: rows.eq(3).find('input').val(),
+            retryMark: rows.eq(4).find('input').val(),
+            overTime: rows.eq(5).find('input').val(),
+            exceptionBack: rows.eq(6).find('input').val(),
+            creator: rows.eq(7).find('input').val()
+        }
+        //请求数据
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            contentType : 'application/json',
+            //请求地址
+            url : '/v1/topic/add',
+            data: JSON.stringify(reqData),
+            //请求成功
+            success : function(result) {
+                $(".select").find('.tips').eq(2).click();
+                //清空input
+                var rows = $(".add_topic").find('.row');
+                for (var i = 0; i <rows.length ; i++) {
+                    rows.eq(i).find('input').val("");
+                }
+
+            }
+        });
+    }
+    //------------------------------业务代码------------------------------
+    $(function() {
+        function redisOnload(){
+            var rule =[
+                {index:0,type:0,key:"name"},
+                {index:0,type:0,key:"url"},
+                {index:0,type:0,key:"status"},
+                {index:0,type:0,key:"vserion"},
+                {index:0,type:0,key:"ramUsed"},
+                {index:0,type:0,key:"amountAll"},
+                {index:0,type:0,key:"amountExisting"},
+                {index:0,type:0,key:"amountDel"},
+                {index:0,type:1,value:"修改配置文件并且重启所有实例"}
+            ]
+            //渲染数据
+            dataList('/v1/redis/list',rule,"#redisList");
+
+        }
+
+        function topicAddOnload(){
+
+        }
+        function topicListOnload(){
+            var rule =[
+                {index:0,type:0,key:"name"},
+                {index:0,type:0,key:"topic"},
+                {index:0,type:0,key:"delayTime"},
+                {index:0,type:0,key:"callBack"},
+                {index:0,type:0,key:"retryMark"},
+                {index:0,type:0,key:"overTime"},
+                {index:0,type:0,key:"exceptionBack"},
+                {index:0,type:0,key:"creator"},
+                {index:0,type:1,value:"删除"}
+            ]
+            //渲染数据
+            dataList('/v1/topic/list',rule,"#topicList");
+
+        }
+        function warningOnload(){}
+
+        //默认调用异常redis配置加载
+        redisOnload();
+        //菜单监听事件
+        $(".select").find('.tips').click(function (){
+            //css改变
+            $('.tips').attr("class",'tips')
+            $(this).attr("class","tips active");
+            //内容切换
+            $('.page').css('display','none');
+            var page = $(this).attr('data-page');
+            $('.'+page).css('display','block')
+            //调用加载事件
+            var pageName = page.substring(page.indexOf('_')+1);
+            if(pageName.indexOf('_')!= -1){
+                var index = pageName.indexOf('_')+1;
+                pageName = changeStr(pageName,index,(pageName.charAt(index).toLocaleUpperCase()));
+                pageName = pageName.replace('_','');
+            }
+            //执行加载函数
+            eval(pageName+"Onload()");
+
+        });
+    });
+</script>
+</body>
+
+</html>

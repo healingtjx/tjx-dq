@@ -1,0 +1,131 @@
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: center;
+}
+table td,
+table th {
+    border: 1px solid #e4e4e4;
+    color: #000;
+    height: 30px;
+    font-size: 13px;
+}
+
+table thead th {
+    width: 100px;
+}
+
+table tr:nth-child(odd) {
+    background: #fff;
+}
+
+table tr:nth-child(even) {
+    background: #F5FAFA;
+}
+
+
+.navbar {
+    background: #222;
+    height: 44px;
+    width: 100%;
+}
+
+.navbar-fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+}
+
+.navbar .title {
+    color: #FFF;
+    font-size: 27px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.main {
+    width: 100%;
+    margin-top: 50px;
+}
+
+.main_div {
+    margin: 0 auto;
+    width: 60%;
+}
+
+.select {
+    border-bottom: 2px solid #e4e4e4;
+    height: 50px;
+}
+
+.select .tips {
+    text-align: center;
+    color: #399eea;
+    line-height: 50px;
+    height: 50px;
+    width: 80px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.select .active {
+    color: #000000;
+    border-left: 2px solid #e4e4e4;
+    border-right: 2px solid #e4e4e4;
+    border-top: 2px solid #e4e4e4;
+    z-index: 100000;
+    background: #FFFFFF;
+}
+
+.add_redis {
+    margin-top: 20px;
+}
+
+.row {
+    margin-left: 110px;
+    height: 43px;
+    line-height: 43px;
+}
+
+.row .name {
+    height: 40px;
+    width: 150px;
+    display: block;
+    float: left;
+    text-align: right;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.row .value {
+    margin-left: 40px;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid #e4e4e4;
+    text-indent: 5px;
+}
+
+.row .btn {
+    width: 50px;
+    height: 25px;
+    font-size: 15px;
+    border: 1px solid #e4e4e4;
+    border-radius: 3px;
+    background: #FFFFFF;
+    margin-left: 190px;
+    cursor: pointer;
+}
+
+.list_redis{
+    margin-top: 40px;
+}
+
+.add_topic ,.page_warning{
+    margin-top: 20px;
+}
+
+.page_topic_list{
+    margin-top: 40px;
+}
