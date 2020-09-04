@@ -129,3 +129,7 @@ table tr:nth-child(even) {
 .page_topic_list{
     margin-top: 40px;
 }
+
+.update_input{
+    width: 96%;
+}

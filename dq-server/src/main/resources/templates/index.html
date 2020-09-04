@@ -157,8 +157,7 @@
                         if(cur.type == 0){
                             trHTML+='<td>'+data[cur.key]+'</td>';
                         }else {
-                            trHTML+='<td>'+cur.value+'</td>';
-
+                            trHTML+='<td data-id="'+ data.id +'">'+cur.value+'</td>';
                         }
                     }
                     trHTML += '</tr>';
@@ -171,6 +170,83 @@
 
 
     //------------------------------业务提交代码--------------------------
+    //取消修改topic
+    function cancelUpdateTopic(){
+        $(".select").find('.tips').eq(2).click();
+    }
+    //确认修改topic
+    function confirmUpdateTopic(e){
+        var id = $(e).parent().attr("data-id");
+        var rows =  $(e).parents('tr').find('td');
+        var reqData = {
+            id:id,
+            name: rows.eq(0).find('input').val(),
+            topic: rows.eq(1).find('input').val(),
+            delayTime: rows.eq(2).find('input').val(),
+            callBack: rows.eq(3).find('input').val(),
+            retryMark: rows.eq(4).find('input').val(),
+            overTime: rows.eq(5).find('input').val(),
+            exceptionBack: rows.eq(6).find('input').val(),
+            creator: rows.eq(7).find('input').val()
+        }
+        //请求数据
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            contentType : 'application/json',
+            //请求地址
+            url : '/v1/topic/add',
+            data: JSON.stringify(reqData),
+            //请求成功
+            success : function(result) {
+                $(".select").find('.tips').eq(2).click();
+            }
+        });
+    }
+    //修改topic
+    function updateTopic(e){
+        //如果有正在修改的
+        if($("#topicList").find('.update_input').length>0){
+            confirm("请完成现有的修改！")
+            return;
+        }
+        var tr = $(e).parents('tr');
+        var tds = tr.find('td');
+        //修改td 变成 input
+        for (var i = 0; i < tds.length - 1; i++) {
+            var td = tds.eq(i);
+            var html = td.html();
+            td.html("<input class='update_input' value='"+html+"' />");
+        }
+        //最后一个直接改成确定
+        var lastTd = tds.eq(tds.length-1);
+        lastTd.html("<a href='javascript:void(0)' onclick='confirmUpdateTopic(this)'>确认</a>  <a href='javascript:void(0)' onclick='cancelUpdateTopic(this)'>取消</a>")
+
+    }
+    //删除topic
+    function delTopic(e){
+        //获取id
+        var id = $(e).parent().attr("data-id");
+        if(confirm("确定删除该topic?")){
+            //请求数据
+            $.ajax({
+                //请求方式
+                type : "POST",
+                //请求的媒体类型
+                contentType : 'application/json',
+                //请求地址
+                url : '/v1/topic/del?id='+id,
+                //请求成功
+                success : function(result) {
+                    $(".select").find('.tips').eq(2).click();
+                }
+            });
+        }
+
+    }
+
+    //添加topic
     function topicAddSubmit(){
         var rows = $(".add_topic").find('.row');
         var reqData = {
@@ -200,7 +276,6 @@
                 for (var i = 0; i <rows.length ; i++) {
                     rows.eq(i).find('input').val("");
                 }
-
             }
         });
     }
@@ -236,7 +311,7 @@
                 {index:0,type:0,key:"overTime"},
                 {index:0,type:0,key:"exceptionBack"},
                 {index:0,type:0,key:"creator"},
-                {index:0,type:1,value:"删除"}
+                {index:0,type:1,value:"<a href='javascript:void(0)' onclick='delTopic(this)'>删除</a>  <a href='javascript:void(0)' onclick='updateTopic(this)'>修改</a>"}
             ]
             //渲染数据
             dataList('/v1/topic/list',rule,"#topicList");

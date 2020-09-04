@@ -26,4 +26,9 @@ public class DqTopicConfigService {
         DqTopicConfig save = dqTopicConfigRepository.save(dqTopicConfig);
         return ResponseUtils.succeed(save);
     }
+
+    public ComResponseBean del(Integer id){
+        dqTopicConfigRepository.deleteById(id.longValue());
+        return ResponseUtils.succeed(null);
+    }
 }

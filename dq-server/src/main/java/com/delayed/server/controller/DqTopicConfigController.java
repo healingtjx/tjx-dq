@@ -31,8 +31,18 @@ public class DqTopicConfigController {
         return dqTopicConfigService.list();
     }
 
+    /**
+     * 添加
+     * @param dqTopicConfig
+     * @return
+     */
     @PostMapping("/add")
     public ComResponseBean add(@RequestBody DqTopicConfig dqTopicConfig){
         return dqTopicConfigService.add(dqTopicConfig);
+    }
+
+    @PostMapping("/del")
+    public ComResponseBean del(int id){
+        return dqTopicConfigService.del(id);
     }
 }
