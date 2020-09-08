@@ -1,8 +1,7 @@
 package com.delayed.server.controller;
 
-import com.delayed.base.model.ComResponseBean;
-import com.delayed.server.model.DqTopicConfig;
-import com.delayed.server.service.DqRedisConfigService;
+import com.delayed.base.bean.ComResponseBean;
+import com.delayed.base.model.DqTopicConfig;
 import com.delayed.server.service.DqTopicConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Slf4j
 @RestController
-@RequestMapping("/v1/topic/")
+@RequestMapping("/config/topic/")
 public class DqTopicConfigController {
 
 

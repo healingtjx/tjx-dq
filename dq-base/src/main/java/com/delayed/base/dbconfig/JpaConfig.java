@@ -1,10 +1,7 @@
-package com.delayed.server.config;
+package com.delayed.base.dbconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
-import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,8 +13,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @作者: tjx
@@ -26,7 +21,7 @@ import java.util.Map;
  **/
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.delayed.server.repository",
+        basePackages = "com.delayed.base.repository",
         transactionManagerRef = "jpaTransactionManager",
         entityManagerFactoryRef = "localContainerEntityManagerFactoryBean"
 )
@@ -50,7 +45,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean
                 = new LocalContainerEntityManagerFactoryBean();
         localContainerEntityManagerFactoryBean.setDataSource(dataSource);
-        localContainerEntityManagerFactoryBean.setPackagesToScan("com.delayed.server.model");
+        localContainerEntityManagerFactoryBean.setPackagesToScan("com.delayed.base.model");
         localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
         return localContainerEntityManagerFactoryBean;
     }

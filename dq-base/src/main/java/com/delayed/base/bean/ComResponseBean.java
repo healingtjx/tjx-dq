@@ -1,4 +1,4 @@
-package com.delayed.base.model;
+package com.delayed.base.bean;
 
 import lombok.Data;
 

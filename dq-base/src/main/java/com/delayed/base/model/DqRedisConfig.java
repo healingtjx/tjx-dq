@@ -1,4 +1,4 @@
-package com.delayed.server.model;
+package com.delayed.base.model;
 
 import lombok.Data;
 
@@ -22,6 +22,11 @@ public class DqRedisConfig {
      */
     private String key;
 
+
+    /**
+     * bucket 数量
+     */
+    private int bucket;
 
     /**
      * 配置信息

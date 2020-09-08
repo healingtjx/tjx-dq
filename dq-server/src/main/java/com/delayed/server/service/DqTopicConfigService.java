@@ -1,9 +1,9 @@
 package com.delayed.server.service;
 
-import com.delayed.base.model.ComResponseBean;
+import com.delayed.base.bean.ComResponseBean;
 import com.delayed.base.utils.ResponseUtils;
-import com.delayed.server.model.DqTopicConfig;
-import com.delayed.server.repository.DqTopicConfigRepository;
+import com.delayed.base.model.DqTopicConfig;
+import com.delayed.base.repository.DqTopicConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

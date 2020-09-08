@@ -1,6 +1,6 @@
-package com.delayed.server.repository;
+package com.delayed.base.repository;
 
-import com.delayed.server.model.DqRedisConfig;
+import com.delayed.base.model.DqTopicConfig;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,9 +14,8 @@ import java.util.List;
  * @创建时间: 创建于19:31 2020/7/15
  **/
 @Component
-public interface DqRedisConfigRepository extends CrudRepository<DqRedisConfig, Long> {
+public interface DqTopicConfigRepository extends CrudRepository<DqTopicConfig, Long> {
 
-    @Query(name="findByUrl",value ="select t from DqRedisConfig t where t.url=:url ")
-    List<DqRedisConfig> findByUrl (@Param("url") String url);
-
+    @Query("select t from DqTopicConfig t where t.name = :name  ")
+    List<DqTopicConfig> findByName(@Param("name") String name);
 }

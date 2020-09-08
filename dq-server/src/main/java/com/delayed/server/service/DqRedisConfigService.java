@@ -1,9 +1,9 @@
 package com.delayed.server.service;
 
-import com.delayed.base.model.ComResponseBean;
+import com.delayed.base.bean.ComResponseBean;
 import com.delayed.base.utils.ResponseUtils;
-import com.delayed.server.model.DqRedisConfig;
-import com.delayed.server.repository.DqRedisConfigRepository;
+import com.delayed.base.model.DqRedisConfig;
+import com.delayed.base.repository.DqRedisConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

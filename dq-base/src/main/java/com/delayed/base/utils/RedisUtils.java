@@ -1,5 +1,6 @@
 package com.delayed.base.utils;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -67,5 +68,54 @@ public class RedisUtils {
     }
 
 
+    public static String get(String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.get(key);
+        }catch (Exception e){
+            return null;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
 
+    /**
+     * KV 形式添加
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean setKV(String key,String value){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.set(key, value);
+            return true;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+    public static boolean zaddOne(String key,String value){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zadd(key, 1, value) >0?true:false;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        RedisUtils.initialize("127.0.0.1:6379:");
+        System.out.println(RedisUtils.zaddOne("test","tjx1"));
+    }
 }

@@ -1,6 +1,6 @@
 package com.delayed.base.utils;
 
-import com.delayed.base.model.ComResponseBean;
+import com.delayed.base.bean.ComResponseBean;
 
 /**
  * @作者: tjx
@@ -14,6 +14,13 @@ public class ResponseUtils {
         bean.setCode(200);
         bean.setMsg("success");
         bean.setData(o);
+        return bean;
+    }
+
+    public static ComResponseBean error(int code,String msg){
+        ComResponseBean bean = new ComResponseBean();
+        bean.setCode(code);
+        bean.setMsg(msg);
         return bean;
     }
 }

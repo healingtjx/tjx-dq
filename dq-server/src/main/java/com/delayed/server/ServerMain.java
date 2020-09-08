@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @描述: server 服务启动类
  * @创建时间: 创建于15:11 2020/7/14
  **/
-@ComponentScan(basePackages = "com.delayed.server")
+@ComponentScan(basePackages = "com.delayed")
 @SpringBootApplication
 public class ServerMain extends SpringBootServletInitializer {
     @Override

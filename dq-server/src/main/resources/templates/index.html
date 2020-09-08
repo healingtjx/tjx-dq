@@ -196,7 +196,7 @@
             //请求的媒体类型
             contentType : 'application/json',
             //请求地址
-            url : '/v1/topic/add',
+            url : '/config/topic/add',
             data: JSON.stringify(reqData),
             //请求成功
             success : function(result) {
@@ -236,7 +236,7 @@
                 //请求的媒体类型
                 contentType : 'application/json',
                 //请求地址
-                url : '/v1/topic/del?id='+id,
+                url : '/config/topic/del?id='+id,
                 //请求成功
                 success : function(result) {
                     $(".select").find('.tips').eq(2).click();
@@ -266,7 +266,7 @@
             //请求的媒体类型
             contentType : 'application/json',
             //请求地址
-            url : '/v1/topic/add',
+            url : '/config/topic/add',
             data: JSON.stringify(reqData),
             //请求成功
             success : function(result) {
@@ -294,7 +294,7 @@
                 {index:0,type:1,value:"修改配置文件并且重启所有实例"}
             ]
             //渲染数据
-            dataList('/v1/redis/list',rule,"#redisList");
+            dataList('/config/redis/list',rule,"#redisList");
 
         }
 
@@ -314,7 +314,7 @@
                 {index:0,type:1,value:"<a href='javascript:void(0)' onclick='delTopic(this)'>删除</a>  <a href='javascript:void(0)' onclick='updateTopic(this)'>修改</a>"}
             ]
             //渲染数据
-            dataList('/v1/topic/list',rule,"#topicList");
+            dataList('/config/topic/list',rule,"#topicList");
 
         }
         function warningOnload(){}

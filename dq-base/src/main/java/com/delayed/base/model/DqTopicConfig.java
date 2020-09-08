@@ -1,4 +1,4 @@
-package com.delayed.server.model;
+package com.delayed.base.model;
 
 import lombok.Data;
 
@@ -34,7 +34,7 @@ public class DqTopicConfig {
      * 延迟执行时间
      */
     @Column(name = "delay_time")
-    private String delayTime;
+    private int delayTime;
 
     /**
      * 回调地址
@@ -58,7 +58,7 @@ public class DqTopicConfig {
      * 超时时间
      */
     @Column(name = "over_time")
-    private String overTime;
+    private int overTime;
 
     /**
      * 超时通知

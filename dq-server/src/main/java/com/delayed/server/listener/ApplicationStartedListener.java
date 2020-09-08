@@ -1,9 +1,9 @@
 package com.delayed.server.listener;
 
+import com.delayed.base.utils.DelayBucketUtils;
 import com.delayed.base.utils.RedisUtils;
-import com.delayed.server.ServerMain;
-import com.delayed.server.model.DqRedisConfig;
-import com.delayed.server.repository.DqRedisConfigRepository;
+import com.delayed.base.model.DqRedisConfig;
+import com.delayed.base.repository.DqRedisConfigRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,14 +31,22 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     @Value("${redis.delayed.url}")
     private String url;
 
+    @Value("${redis.delayed.bucket}")
+    private int bucket;
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         try {
             //修改数据库
             List<DqRedisConfig> configs = dqRedisConfigRepository.findByUrl(url);
             //如果找到配置相同的 不做任何操作
-            if(configs.size()>0)
+            if(configs.size()>0){
+                //修改
+                DqRedisConfig dqRedisConfig = configs.get(0);
+                dqRedisConfig.setName(delayedName);
+                dqRedisConfig.setBucket(bucket);
+                dqRedisConfigRepository.save(dqRedisConfig);
                 return;
+            }
             //没有找到匹配的
             //1.删除所有
             dqRedisConfigRepository.deleteAll();
@@ -47,6 +55,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             newDq.setId(1l);
             newDq.setUrl(url);
             newDq.setName(delayedName);
+            newDq.setBucket(bucket);
             newDq.setStatus(0);
 
             //其他连接状态这个版本暂时不处理
@@ -59,6 +68,8 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
         }finally {
             //实例化redis
             RedisUtils.initialize(url);
+            //实例化DelayBucket
+            DelayBucketUtils.initialize(bucket);
             //判断是否连接成功
             log.info(RedisUtils.checkStatus()+"");
             if(RedisUtils.checkStatus()){
