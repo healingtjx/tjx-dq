@@ -1,4 +1,4 @@
-package com.delayed.server.pojo.enumeration;
+package com.delayed.base.enumeration;
 
 /**
  * @作者: tjx

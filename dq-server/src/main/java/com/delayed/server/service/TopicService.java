@@ -8,7 +8,7 @@ import com.delayed.base.utils.RedisUtils;
 import com.delayed.base.utils.ResponseUtils;
 import com.delayed.base.utils.StringUtil;
 import com.delayed.base.model.DqTopicConfig;
-import com.delayed.server.pojo.enumeration.JobStatusEnum;
+import com.delayed.base.enumeration.JobStatusEnum;
 import com.delayed.server.pojo.vo.TopicVo;
 import com.delayed.base.repository.DqTopicConfigRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,6 @@ public class TopicService {
         if(StringUtil.isHaveNull(topic.getBody(),topic.getCmd(),topic.getId(),topic.getTopic())){
             return ResponseUtils.error(500,"请检查传入的参数");
         }
-
         //2.校验 topic 真实性
         List<DqTopicConfig> topicConfigs = dqTopicConfigRepository.findByName(topic.getTopic());
         if(topicConfigs.size() == 0)
@@ -45,7 +44,9 @@ public class TopicService {
         job.setId(topic.getId());
         job.setBody(topic.getBody());
         job.setTopic(topic.getTopic());
-        job.setDelay(dqTopicConfig.getDelayTime());
+        //计算出延迟时间  (ps: * 1000 是为了 从秒转化 到毫秒)
+        long delay = System.currentTimeMillis() + (dqTopicConfig.getDelayTime() * 1000 );
+        job.setDelay(delay);
         job.setTtr(dqTopicConfig.getOverTime());
         job.setStatus(JobStatusEnum.ready.name());
         if(!(RedisUtils.get(topic.getId()) == null))
@@ -61,4 +62,9 @@ public class TopicService {
         return ResponseUtils.succeed(null);
 
     }
+
+    public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis()+1*60*1000);
+    }
+
 }

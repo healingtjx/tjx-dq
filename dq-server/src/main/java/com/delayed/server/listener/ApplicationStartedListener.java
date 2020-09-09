@@ -71,7 +71,6 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             //实例化DelayBucket
             DelayBucketUtils.initialize(bucket);
             //判断是否连接成功
-            log.info(RedisUtils.checkStatus()+"");
             if(RedisUtils.checkStatus()){
                 //打印成功信息
                 log.info("redis实例化成功:当前名称:"+delayedName+"\t当前url:"+url);

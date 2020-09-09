@@ -22,9 +22,9 @@ public class Job {
     private String id;
 
     /**
-     * 延迟执行时间
+     * 延迟时间秒数字
      */
-    private int delay;
+    private long delay;
 
     /**
      * 最大执行时间
@@ -37,7 +37,7 @@ public class Job {
     private String body;
 
     /**
-     * 状态 详见 com.delayed.server.pojo.enumeration.JobStatusEnum
+     * 状态 详见 com.delayed.base.enumeration.JobStatusEnum
      */
     private String status;
 }

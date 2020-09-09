@@ -4,6 +4,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * @作者: tjx
  * @描述: redis操作工具类
@@ -24,6 +27,11 @@ public class RedisUtils {
     private static int TIMEOUT = 10000;
     //在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
     private static boolean TEST_ON_BORROW = true;
+
+    private static final String LOCK_SUCCESS = "OK";
+    private static final String SET_IF_NOT_EXIST = "NX";
+    private static final String SET_WITH_EXPIRE_TIME = "PX";
+    private static final Long RELEASE_SUCCESS = 1L;
 
     /**
      * 实例化
@@ -67,6 +75,18 @@ public class RedisUtils {
         return false;
     }
 
+    public static void  del(String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+             jedis.del(key);
+        }catch (Exception e){
+            return;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
 
     public static String get(String key){
         Jedis jedis = null;
@@ -80,6 +100,26 @@ public class RedisUtils {
                 jedis.close();
         }
     }
+
+
+    /**
+     * 自增
+     * @param key
+     * @return
+     */
+    public static long incr(String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.incr(key);
+        }catch (Exception e){
+            return 0;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
 
     /**
      * KV 形式添加
@@ -101,11 +141,126 @@ public class RedisUtils {
         }
     }
 
+
+    /**
+     * set队列 插入
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean sadd(String key,String value){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.sadd(key, value)>0?true:false;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+    /**
+     * Zset 添加 一个元素
+     * @param key
+     * @param value
+     * @return
+     */
     public static boolean zaddOne(String key,String value){
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             return jedis.zadd(key, 1, value) >0?true:false;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+
+    public static boolean zrem (String key,String value){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.srem(key, value) >0?true:false;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+
+    /**
+     * 获取zset 内容分页
+     * @param key
+     * @param start  起始值
+     * @param end    结束值(-1代表查所有)
+     * @return
+     */
+    public static Set<String> zrange(String key,int start ,int end){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zrange(key, start, end);
+        }catch (Exception e){
+            return null;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+
+
+
+
+    /**
+     * 尝试获取分布式锁
+     * @param lockKey      锁
+     * @param requestId    请求标识
+     * @param expireTime   超期时间
+     * @return  是否获取成功
+     */
+    public static boolean tryGetDistributedLock( String lockKey, String requestId, int expireTime){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
+
+            if (LOCK_SUCCESS.equals(result)) {
+                return true;
+            }
+            return false;
+        }catch (Exception e){
+            return false;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+
+    /**
+     * 释放分布式锁
+     * @param lockKey    锁
+     * @param requestId  请求标识
+     * @return
+     */
+    public static boolean releaseDistributedLock( String lockKey, String requestId){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+            Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
+            if (RELEASE_SUCCESS.equals(result)) {
+                return true;
+            }
+            return false;
         }catch (Exception e){
             return false;
         }finally {

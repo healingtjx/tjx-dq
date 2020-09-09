@@ -1,5 +1,7 @@
 package com.delayed.base.utils;
 
+import com.delayed.base.enumeration.CommonKeyEnum;
+
 /**
  * @作者: tjx
  * @描述: 用于 DelayBucket 相关的操作
@@ -11,7 +13,6 @@ public class DelayBucketUtils {
 
     private static volatile int index = 0;
 
-    final static String BUCKET_KEY = "delayBucket";
 
     /**
      * 实例化
@@ -26,7 +27,7 @@ public class DelayBucketUtils {
 
     public static String getNextBucket(){
         try {
-            return BUCKET_KEY + indexs[index];
+            return CommonKeyEnum.delayBucket.name() + indexs[index];
         }finally {
             index++;
             if(index == indexs.length)
@@ -37,7 +38,7 @@ public class DelayBucketUtils {
     public static String[] getAllBucket(){
         String[] keys = new String[indexs.length];
         for (int i = 0; i < indexs.length; i++) {
-            keys[i] = BUCKET_KEY + indexs[i];
+            keys[i] = CommonKeyEnum.delayBucket.name() + indexs[i];
         }
         return keys;
     }
