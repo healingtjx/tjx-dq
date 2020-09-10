@@ -103,6 +103,24 @@ public class RedisUtils {
 
 
     /**
+     * spop 获取set元素最上面的
+     * @param key
+     * @return
+     */
+    public static String spop(String key){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.spop(key);
+        }catch (Exception e){
+            return null;
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+    }
+
+    /**
      * 自增
      * @param key
      * @return
@@ -185,7 +203,7 @@ public class RedisUtils {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            return jedis.srem(key, value) >0?true:false;
+            return jedis.zrem(key, value) >0?true:false;
         }catch (Exception e){
             return false;
         }finally {

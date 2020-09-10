@@ -11,6 +11,18 @@
 
     <artifactId>dq-consume</artifactId>
 
-    
+    <dependencies>
+        <!-- 引用 base 基础类-->
+        <dependency>
+            <groupId>com.delayed</groupId>
+            <artifactId>dq-base</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- sprinboot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

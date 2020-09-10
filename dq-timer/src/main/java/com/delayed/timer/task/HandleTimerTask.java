@@ -7,6 +7,7 @@ import com.delayed.base.enumeration.JobStatusEnum;
 import com.delayed.base.enumeration.CommonKeyEnum;
 import com.delayed.base.utils.DelayBucketUtils;
 import com.delayed.base.utils.RedisUtils;
+import com.delayed.base.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -44,20 +45,30 @@ public class HandleTimerTask extends TimerTask {
                         for (String key : zrange) {
                             //拉取 job 元信息
                             String jobStr = RedisUtils.get(key);
+                            //判断是否已经执行完毕被删除
+                            if(StringUtil.isNull(jobStr)){
+                                //移除当前异常元素
+                                RedisUtils.zrem(bucketKey,key);
+                                //删除当前job元数据
+                                RedisUtils.del(key);
+                                //执行下一个元素
+                                continue;
+                            }
                             //转化 str 变成 对象
                             Job job = null;
                             try {
                                  job = JSON.parseObject(jobStr, Job.class);
                             }catch (Exception e){
                                 //移除当前异常元素
-                                RedisUtils.zrem(key,job.getId());
+                                RedisUtils.zrem(bucketKey,key);
                                 //删除当前job元数据
-                                RedisUtils.del(job.getId());
+                                RedisUtils.del(key);
                                 //执行下一个元素
                                 continue;
                             }
-                            if(job == null)
+                            if(job == null){
                                 continue;
+                            }
 
                             long delay = job.getDelay();
                             //获取当前时间
@@ -67,7 +78,7 @@ public class HandleTimerTask extends TimerTask {
                             //如果是 deleted 状态
                             if(status == null || JobStatusEnum.deleted.name().equals(status)){
                                 //移除当前JobId
-                                RedisUtils.zrem(key,job.getId());
+                                RedisUtils.zrem(bucketKey,key);
                                 //直接进行下一个
                                 continue;
                             }
@@ -95,14 +106,14 @@ public class HandleTimerTask extends TimerTask {
                                     //存入 ready queue
                                     RedisUtils.sadd(CommonKeyEnum.readyQueue.name(),job.getId());
                                     //移除当前JobId
-                                    RedisUtils.zrem(key,job.getId());
+                                    RedisUtils.zrem(bucketKey,key);
                                     RedisUtils.setKV(job.getId(),JSON.toJSONString(job));
                                 }else {
                                     //如果是ready 状态
                                     //存入 ready queue
                                     RedisUtils.sadd(CommonKeyEnum.readyQueue.name(),job.getId());
                                     //移除当前JobId
-                                    RedisUtils.zrem(key,job.getId());
+                                    RedisUtils.zrem(bucketKey,key);
                                     //设置当前状态
                                     job.setStatus(JobStatusEnum.reserved.name());
                                     //重新计算时间  加上ttr的时间
@@ -112,14 +123,14 @@ public class HandleTimerTask extends TimerTask {
                                     job.setDelay(newDelay);
                                     RedisUtils.setKV(job.getId(),JSON.toJSONString(job));
                                     //移除当前JobId
-                                    RedisUtils.zrem(key,job.getId());
+                                    RedisUtils.zrem(bucketKey,key);
                                     //存入新的 bucket
                                     String nextBucket = DelayBucketUtils.getNextBucket();
                                     RedisUtils.zaddOne(nextBucket,key);
                                 }
                             }else {
                                 //移除当前JobId
-                                RedisUtils.zrem(key,job.getId());
+                                RedisUtils.zrem(bucketKey,key);
                                 //存入新的 bucket
                                 String nextBucket = DelayBucketUtils.getNextBucket();
                                 RedisUtils.zaddOne(nextBucket,key);
