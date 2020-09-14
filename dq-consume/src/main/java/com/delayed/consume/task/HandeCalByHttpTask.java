@@ -44,9 +44,8 @@ public class HandeCalByHttpTask implements Runnable{
 
         if(StringUtil.isNull(job.getTopic()))
             return;
-        System.out.println(dqTopicConfigRepository);
         //判断topic是否状态正常
-        List<DqTopicConfig> topics = dqTopicConfigRepository.findByName(job.getTopic());
+        List<DqTopicConfig> topics = dqTopicConfigRepository.findByTopic(job.getTopic());
         if(topics.size() == 0)
             return;
         DqTopicConfig topicConfig = topics.get(0);

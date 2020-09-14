@@ -16,6 +16,6 @@ import java.util.List;
 @Component
 public interface DqTopicConfigRepository extends CrudRepository<DqTopicConfig, Long> {
 
-    @Query("select t from DqTopicConfig t where t.name = :name  ")
-    List<DqTopicConfig> findByName(@Param("name") String name);
+    @Query("select t from DqTopicConfig t where t.topic = :topic  ")
+    List<DqTopicConfig> findByTopic(@Param("topic") String topic);
 }
