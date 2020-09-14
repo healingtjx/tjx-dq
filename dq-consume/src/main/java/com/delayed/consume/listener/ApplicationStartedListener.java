@@ -2,6 +2,7 @@ package com.delayed.consume.listener;
 
 import com.delayed.base.model.DqRedisConfig;
 import com.delayed.base.repository.DqRedisConfigRepository;
+import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.DelayBucketUtils;
 import com.delayed.base.utils.RedisUtils;
 import com.delayed.consume.task.HandleConsumeTask;
@@ -26,6 +27,9 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
 
     @Autowired
     private DqRedisConfigRepository dqRedisConfigRepository;
+
+    @Autowired
+    private DqTopicConfigRepository dqTopicConfigRepository;
 
     @Value("${redis.consume.speed}")
     private int speed;
@@ -64,7 +68,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
         //3.拉取consume 配置个数
         for (int i = 0; i < consume; i++) {
             //2. 启动 consume
-            new Timer().schedule(new HandleConsumeTask(),1000,speed*100);
+            new Timer().schedule(new HandleConsumeTask(dqTopicConfigRepository),1000,speed*100);
         }
 
 

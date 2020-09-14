@@ -1,6 +1,7 @@
 package com.delayed.server.controller;
 
 import com.delayed.base.bean.ComResponseBean;
+import com.delayed.base.utils.ResponseUtils;
 import com.delayed.server.pojo.vo.TopicVo;
 import com.delayed.server.service.TopicService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,5 +27,12 @@ public class TopicController {
     @PostMapping("/submit")
     public ComResponseBean submit(@RequestBody TopicVo topicVo){
         return topicService.submit(topicVo);
+    }
+
+
+    @RequestMapping("/callBack")
+    public ComResponseBean callBack(String id,String test){
+        System.out.println(id +"\t" +test);
+        return ResponseUtils.succeed(id);
     }
 }

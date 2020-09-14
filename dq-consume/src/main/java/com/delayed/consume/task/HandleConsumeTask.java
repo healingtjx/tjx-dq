@@ -3,6 +3,7 @@ package com.delayed.consume.task;
 import com.alibaba.fastjson.JSON;
 import com.delayed.base.bean.Job;
 import com.delayed.base.enumeration.CommonKeyEnum;
+import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +16,10 @@ import java.util.TimerTask;
  **/
 @Slf4j
 public class HandleConsumeTask extends TimerTask {
+    private DqTopicConfigRepository dqTopicConfigRepository;
+    public HandleConsumeTask(DqTopicConfigRepository dqTopicConfigRepository){
+        this.dqTopicConfigRepository = dqTopicConfigRepository;
+    }
 
     @Override
     public void run() {
@@ -37,11 +42,9 @@ public class HandleConsumeTask extends TimerTask {
         if(job == null)
             return;
         //消费
-        log.info("消费成功"+"\t"+jobStr);
+        log.info("开始消费"+"\t"+jobStr);
 
-        //删除所有相关元数据
-        RedisUtils.del(jobId);
-        RedisUtils.del(jobId+CommonKeyEnum.incr);
+        new Thread(new HandeCalByHttpTask(job,dqTopicConfigRepository)).start();
 
     }
 }

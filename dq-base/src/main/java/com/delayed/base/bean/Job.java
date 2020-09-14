@@ -31,10 +31,6 @@ public class Job {
      */
     private int ttr;
 
-    /**
-     * 请求地址
-     */
-    private String url;
 
     /**
      * 参数

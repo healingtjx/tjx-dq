@@ -44,7 +44,6 @@ public class TopicService {
         job.setId(topic.getId());
         job.setBody(topic.getBody());
         job.setTopic(topic.getTopic());
-        job.setUrl(dqTopicConfig.getCallBack());
         //计算出延迟时间  (ps: * 1000 是为了 从秒转化 到毫秒)
         long delay = System.currentTimeMillis() + (dqTopicConfig.getDelayTime() * 1000 );
         job.setDelay(delay);
