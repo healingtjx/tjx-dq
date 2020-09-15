@@ -74,6 +74,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             if(RedisUtils.checkStatus()){
                 //打印成功信息
                 log.info("redis实例化成功:当前名称:"+delayedName+"\t当前url:"+url);
+                log.info("lai l .. ");
             }else {
                 //抛出异常
                 throw new RuntimeException("redis实例化失败，请认真检测配置的redis(url格式:host:port:auth)");
