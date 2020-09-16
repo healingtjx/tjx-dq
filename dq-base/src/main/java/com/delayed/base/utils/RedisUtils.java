@@ -289,6 +289,6 @@ public class RedisUtils {
 
     public static void main(String[] args) {
         RedisUtils.initialize("127.0.0.1:6379:");
-        System.out.println(RedisUtils.zaddOne("test","tjx1"));
+        System.out.println(RedisUtils.zaddOne("delayBucket3","testt"));
     }
 }

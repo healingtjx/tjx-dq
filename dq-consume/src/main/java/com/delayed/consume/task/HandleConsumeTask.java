@@ -8,6 +8,8 @@ import com.delayed.base.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @作者: tjx
@@ -17,8 +19,12 @@ import java.util.TimerTask;
 @Slf4j
 public class HandleConsumeTask extends TimerTask {
     private DqTopicConfigRepository dqTopicConfigRepository;
+    //线程池(可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程)
+    private ExecutorService cachedThreadPool;
+
     public HandleConsumeTask(DqTopicConfigRepository dqTopicConfigRepository){
         this.dqTopicConfigRepository = dqTopicConfigRepository;
+        cachedThreadPool = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -43,8 +49,6 @@ public class HandleConsumeTask extends TimerTask {
             return;
         //消费
         log.info("开始消费"+"\t"+jobStr);
-
-        new Thread(new HandeCalByHttpTask(job,dqTopicConfigRepository)).start();
-
+        cachedThreadPool.execute(new HandeCalByHttpTask(job,dqTopicConfigRepository));
     }
 }

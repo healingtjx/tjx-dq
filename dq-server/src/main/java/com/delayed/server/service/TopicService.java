@@ -61,14 +61,17 @@ public class TopicService {
 
                 //4. 存入   Delay Bucket
                 String bucketKey = DelayBucketUtils.getNextBucket();
+                log.info("next:"+bucketKey);
                 if(!RedisUtils.zaddOne(bucketKey,topic.getId()))
                     return ResponseUtils.error(500,"Delay Bucket插入失败");
+                log.info("添加job成功:"+job.toString());
                 break;
             }
             case "del":{
                 //删除
                 RedisUtils.del(topic.getId());
                 RedisUtils.del(topic.getId()+ CommonKeyEnum.incr.name());
+                log.info("删除job成功:"+topic.getId());
                 break;
             }
             default:
