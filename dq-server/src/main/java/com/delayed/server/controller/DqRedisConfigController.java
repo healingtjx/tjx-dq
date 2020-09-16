@@ -1,11 +1,12 @@
 package com.delayed.server.controller;
 
 import com.delayed.base.bean.ComResponseBean;
+import com.delayed.base.model.DqRedisConfig;
+import com.delayed.server.pojo.vo.DqRedisConfigVo;
 import com.delayed.server.service.DqRedisConfigService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @作者: tjx
@@ -29,4 +30,8 @@ public class DqRedisConfigController {
     }
 
 
+    @PostMapping("/update")
+    public ComResponseBean update(@RequestBody DqRedisConfigVo configVo){
+        return dqRedisConfigService.save(configVo);
+    }
 }

@@ -48,28 +48,29 @@ public class DqRedisConfig {
     private String vserion;
 
     /**
-     * 已使用内存
+     *  consume 个数
      */
-    @Column(name="ram_used")
-    private String ramUsed;
+    private int consume;
+
 
     /**
-     * 消息总数
+     * consume 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="amount_all")
-    private String amountAll;
+    @Column(name="consume_speed")
+    private int consumeSpeed;
+
 
     /**
-     * 已经消费消息数量
+     * timer 个数
      */
-    @Column(name="amount_existing")
-    private String amountExisting;
+    private int timer;
 
     /**
-     * 已经被删除消息数量
+     * timer 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="amount_del")
-    private String amountDel;
+    @Column(name="timer_speed")
+    private int timerSpeed;
+
 
 
 }

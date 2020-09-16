@@ -15,16 +15,12 @@
         <module>dq-checker</module>
         <module>dq-server</module>
     </modules>
-    <!--  公共版本 -->
-    <properties>
-        <springboot.vserion>2.1.0.RELEASE</springboot.vserion>
-    </properties>
 
     <!-- springboot基础依赖 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>${springboot.vserion}</version>
+        <version>2.1.0.RELEASE</version>
         <relativePath/>
     </parent>
 

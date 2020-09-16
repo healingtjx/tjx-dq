@@ -5,11 +5,14 @@ import com.delayed.base.utils.ResponseUtils;
 import com.delayed.server.pojo.vo.TopicVo;
 import com.delayed.server.service.TopicService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.configuration.ConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 
 /**
  * @作者: tjx
@@ -33,6 +36,15 @@ public class TopicController {
     @RequestMapping("/callBack")
     public ComResponseBean callBack(String id,String test){
         System.out.println(id +"\t" +test);
+        try {
+            PropertiesConfiguration conf = new PropertiesConfiguration("application.properties");
+            conf.setProperty("delayed.timer",0);
+            conf.save();
+
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+
         return ResponseUtils.succeed(id);
     }
 }

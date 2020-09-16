@@ -31,13 +31,13 @@
                     <tr>
                         <th>名称</th>
                         <th style="width: 30%;">配置(host:port:auth)</th>
-                        <th>状态</th>
+                        <th>timer个数</th>
+                        <th>timer扫描速度(单位毫秒)</th>
+                        <th>consume个数</th>
+                        <th>consume扫描速度(单位毫秒)</th>
                         <th>版本</th>
-                        <th>已用内存</th>
-                        <th>总写入</th>
-                        <th>总消费</th>
-                        <th>总删除</th>
-                        <th>重新配置</th>
+                        <th>备注</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody id="redisList">
@@ -170,6 +170,38 @@
 
 
     //------------------------------业务提交代码--------------------------
+
+    //取消修改topic
+    function cancelUpdateRedis(){
+        $(".select").find('.tips').eq(0).click();
+    }
+    //确认修改topic
+    function confirmUpdateRedis(e){
+        var id = $(e).parent().attr("data-id");
+        var rows =  $(e).parents('tr').find('td');
+        var reqData = {
+            id:id,
+            timer: rows.eq(2).find('input').val(),
+            timerSpeed: rows.eq(3).find('input').val(),
+            consume: rows.eq(4).find('input').val(),
+            consumeSpeed: rows.eq(5).find('input').val()
+
+        }
+        //请求数据
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            contentType : 'application/json',
+            //请求地址
+            url : '/config/redis/update',
+            data: JSON.stringify(reqData),
+            //请求成功
+            success : function(result) {
+                $(".select").find('.tips').eq(0).click();
+            }
+        });
+    }
     //取消修改topic
     function cancelUpdateTopic(){
         $(".select").find('.tips').eq(2).click();
@@ -203,6 +235,28 @@
                 $(".select").find('.tips').eq(2).click();
             }
         });
+    }
+
+    //修改redis
+    function updateRedis(e){
+        //如果有正在修改的
+        if($("#redisList").find('.update_input').length>0){
+            confirm("请完成现有的修改！")
+            return;
+        }
+
+        var tr = $(e).parents('tr');
+        var tds = tr.find('td');
+        //修改td 变成 input
+        for (var i = 2; i < 6; i++) {
+            var td = tds.eq(i);
+            var html = td.html();
+            td.html("<input class='update_input' value='"+html+"' />");
+        }
+        //最后一个直接改成确定
+        var lastTd = tds.eq(tds.length-1);
+        lastTd.html("<a href='javascript:void(0)' onclick='confirmUpdateRedis(this)'>确认</a>  <a href='javascript:void(0)' onclick='cancelUpdateRedis(this)'>取消</a>")
+
     }
     //修改topic
     function updateTopic(e){
@@ -285,13 +339,13 @@
             var rule =[
                 {index:0,type:0,key:"name"},
                 {index:0,type:0,key:"url"},
-                {index:0,type:0,key:"status"},
+                {index:0,type:0,key:"timer"},
+                {index:0,type:0,key:"timerSpeed"},
+                {index:0,type:0,key:"consume"},
+                {index:0,type:0,key:"consumeSpeed"},
                 {index:0,type:0,key:"vserion"},
-                {index:0,type:0,key:"ramUsed"},
-                {index:0,type:0,key:"amountAll"},
-                {index:0,type:0,key:"amountExisting"},
-                {index:0,type:0,key:"amountDel"},
-                {index:0,type:1,value:"修改配置文件并且重启所有实例"}
+                {index:0,type:1,value:"修改配置文件并且重启所有实例"},
+                {index:0,type:1,value:"<a href='javascript:void(0)' onclick='updateRedis(this)'>修改</a>"}
             ]
             //渲染数据
             dataList('/config/redis/list',rule,"#redisList");

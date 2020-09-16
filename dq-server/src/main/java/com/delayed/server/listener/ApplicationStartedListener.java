@@ -33,6 +33,20 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
 
     @Value("${redis.delayed.bucket}")
     private int bucket;
+
+    @Value("${delayed.timer}")
+    private int timer;
+
+    @Value("${delayed.timer.speed}")
+    private int timerSpeed;
+
+
+    @Value("${delayed.consume}")
+    private int consume;
+
+    @Value("${delayed.consume.speed}")
+    private int consumeSpeed;
+
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         try {
@@ -44,6 +58,10 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
                 DqRedisConfig dqRedisConfig = configs.get(0);
                 dqRedisConfig.setName(delayedName);
                 dqRedisConfig.setBucket(bucket);
+                dqRedisConfig.setConsume(consume);
+                dqRedisConfig.setConsumeSpeed(consumeSpeed);
+                dqRedisConfig.setTimer(timer);
+                dqRedisConfig.setTimerSpeed(timerSpeed);
                 dqRedisConfigRepository.save(dqRedisConfig);
                 return;
             }
@@ -57,13 +75,12 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             newDq.setName(delayedName);
             newDq.setBucket(bucket);
             newDq.setStatus(0);
-
+            newDq.setConsume(consume);
+            newDq.setConsumeSpeed(consumeSpeed);
+            newDq.setTimer(timer);
+            newDq.setTimerSpeed(timerSpeed);
             //其他连接状态这个版本暂时不处理
             newDq.setVserion("未知");
-            newDq.setRamUsed("未知");
-            newDq.setAmountAll("未知");
-            newDq.setAmountDel("未知");
-            newDq.setAmountExisting("未知");
             dqRedisConfigRepository.save(newDq);
         }finally {
             //实例化redis

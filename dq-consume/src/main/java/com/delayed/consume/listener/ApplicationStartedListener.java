@@ -31,11 +31,6 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     @Autowired
     private DqTopicConfigRepository dqTopicConfigRepository;
 
-    @Value("${redis.consume.speed}")
-    private int speed;
-
-    @Value("${redis.delayed.consume}")
-    private int consume;
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
@@ -64,11 +59,13 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
         //打印成功信息
         log.info("redis实例化成功:当前名称:"+delayedName+"\t当前url:"+url);
 
+        int consume = dqRedisConfig.getConsume();
+        int consumeSpeed = dqRedisConfig.getConsumeSpeed();
 
         //3.拉取consume 配置个数
         for (int i = 0; i < consume; i++) {
             //2. 启动 consume
-            new Timer().schedule(new HandleConsumeTask(dqTopicConfigRepository),1000,speed*100);
+            new Timer().schedule(new HandleConsumeTask(dqTopicConfigRepository),1000,consumeSpeed*100);
         }
 
 

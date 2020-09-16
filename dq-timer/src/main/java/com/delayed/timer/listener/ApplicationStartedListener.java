@@ -27,12 +27,6 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     @Autowired
     private DqRedisConfigRepository dqRedisConfigRepository;
 
-    @Value("${redis.delayed.timer}")
-    private int timer;
-
-    @Value("${redis.delayed.speed}")
-    private int speed;
-
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
@@ -66,11 +60,13 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             new RuntimeException("没有可用bucket，请在dq-server里面配置");
             return;
         }
+        int timer = dqRedisConfig.getTimer();
+        int timerSpeed = dqRedisConfig.getTimerSpeed();
 
         //3.拉取timer 配置个数
         for (int i = 0; i < timer; i++) {
             //3.启动timer
-            new Timer().schedule(new HandleTimerTask(allBucket),1000,speed*100);
+            new Timer().schedule(new HandleTimerTask(allBucket),1000,timerSpeed*100);
         }
     }
 }
