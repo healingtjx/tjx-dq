@@ -1,6 +1,7 @@
 package com.delayed.consume.listener;
 
 import com.delayed.base.model.DqRedisConfig;
+import com.delayed.base.notify.NotifyService;
 import com.delayed.base.repository.DqRedisConfigRepository;
 import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.DelayBucketUtils;
@@ -30,6 +31,9 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
 
     @Autowired
     private DqTopicConfigRepository dqTopicConfigRepository;
+
+    @Autowired
+    private NotifyService notifyService;
 
 
     @Override
@@ -65,7 +69,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
         //3.拉取consume 配置个数
         for (int i = 0; i < consume; i++) {
             //2. 启动 consume
-            new Timer().schedule(new HandleConsumeTask(dqTopicConfigRepository),1000,consumeSpeed*100);
+            new Timer().schedule(new HandleConsumeTask(dqTopicConfigRepository,notifyService),1000,consumeSpeed*100);
         }
 
 

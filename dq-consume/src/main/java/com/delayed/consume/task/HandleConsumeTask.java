@@ -3,10 +3,10 @@ package com.delayed.consume.task;
 import com.alibaba.fastjson.JSON;
 import com.delayed.base.bean.Job;
 import com.delayed.base.enumeration.CommonKeyEnum;
+import com.delayed.base.notify.NotifyService;
 import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,12 +18,14 @@ import java.util.concurrent.Executors;
  **/
 @Slf4j
 public class HandleConsumeTask extends TimerTask {
+    private NotifyService notifyService;
     private DqTopicConfigRepository dqTopicConfigRepository;
     //线程池(可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程)
     private ExecutorService cachedThreadPool;
 
-    public HandleConsumeTask(DqTopicConfigRepository dqTopicConfigRepository){
+    public HandleConsumeTask(DqTopicConfigRepository dqTopicConfigRepository,NotifyService notifyService){
         this.dqTopicConfigRepository = dqTopicConfigRepository;
+        this.notifyService = notifyService;
         cachedThreadPool = Executors.newCachedThreadPool();
     }
 
@@ -49,6 +51,6 @@ public class HandleConsumeTask extends TimerTask {
             return;
         //消费
         log.info("开始消费"+"\t"+jobStr);
-        cachedThreadPool.execute(new HandeCalByHttpTask(job,dqTopicConfigRepository));
+        cachedThreadPool.execute(new HandeCalByHttpTask(job,dqTopicConfigRepository,notifyService));
     }
 }

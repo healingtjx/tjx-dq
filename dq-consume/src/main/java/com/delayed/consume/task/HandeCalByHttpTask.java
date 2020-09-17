@@ -5,6 +5,7 @@ import com.delayed.base.bean.ComResponseBean;
 import com.delayed.base.bean.Job;
 import com.delayed.base.enumeration.CommonKeyEnum;
 import com.delayed.base.model.DqTopicConfig;
+import com.delayed.base.notify.NotifyService;
 import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.RedisUtils;
 import com.delayed.base.utils.StringUtil;
@@ -33,11 +34,12 @@ public class HandeCalByHttpTask implements Runnable{
     private Job job;
 
     private DqTopicConfigRepository dqTopicConfigRepository;
+    private NotifyService notifyService;
 
-
-    public HandeCalByHttpTask(Job job,DqTopicConfigRepository dqTopicConfigRepository){
+    public HandeCalByHttpTask(Job job,DqTopicConfigRepository dqTopicConfigRepository,NotifyService notifyServic){
         this.job = job;
         this.dqTopicConfigRepository = dqTopicConfigRepository;
+        this.notifyService = notifyServic;
     }
     @Override
     public void run() {
@@ -101,7 +103,9 @@ public class HandeCalByHttpTask implements Runnable{
                 RedisUtils.del(job.getId());
                 RedisUtils.del(job.getId()+CommonKeyEnum.incr);
             }else{
-                log.error("http结果不符合,接口返回结果"+response.getCode()+"("+job.toString()+")");
+                String msg = "http结果不符合,接口返回结果"+response.getCode()+"("+job.toString()+")";
+                log.error(msg);
+                notifyService.notifyMessage(msg);
             }
         }catch (Exception e){
             e.printStackTrace();
