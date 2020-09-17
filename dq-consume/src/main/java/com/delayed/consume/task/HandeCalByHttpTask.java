@@ -9,6 +9,7 @@ import com.delayed.base.repository.DqTopicConfigRepository;
 import com.delayed.base.utils.RedisUtils;
 import com.delayed.base.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -32,6 +33,7 @@ public class HandeCalByHttpTask implements Runnable{
     private Job job;
 
     private DqTopicConfigRepository dqTopicConfigRepository;
+
 
     public HandeCalByHttpTask(Job job,DqTopicConfigRepository dqTopicConfigRepository){
         this.job = job;

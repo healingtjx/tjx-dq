@@ -35,12 +35,10 @@ public class TopicController {
 
     @RequestMapping("/callBack")
     public ComResponseBean callBack(String id,String test){
-        System.out.println(id +"\t" +test);
         try {
             PropertiesConfiguration conf = new PropertiesConfiguration("application.properties");
             conf.setProperty("delayed.timer",0);
             conf.save();
-
         } catch (ConfigurationException e) {
             e.printStackTrace();
         }

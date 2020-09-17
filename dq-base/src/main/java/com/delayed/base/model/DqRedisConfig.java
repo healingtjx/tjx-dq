@@ -72,5 +72,11 @@ public class DqRedisConfig {
     private int timerSpeed;
 
 
+    /**
+     * 通知电话
+     */
+    @Column(name = "warning_phone")
+    private String warningPhone;
+
 
 }

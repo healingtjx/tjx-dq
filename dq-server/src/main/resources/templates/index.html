@@ -113,11 +113,12 @@
         <div class="page page_warning" style="display: none;">
             <div class="page_warning">
                 <div class="row">
-                    <span class="name">redis宕机通知</span>
-                    <input class="value" placeholder="请输入通知接口地址" />
+                    <span class="name">警告通知电话号码</span>
+                    <input type="hidden" id="warningId" >
+                    <input class="value" id="warningPhone" placeholder="请输入警告通知电话号码" />
                 </div>
                 <div class="row">
-                    <button class="btn">提交</button>
+                    <button class="btn" onclick="updateWarningPhone()">提交</button>
                 </div>
             </div>
         </div>
@@ -171,6 +172,28 @@
 
     //------------------------------业务提交代码--------------------------
 
+    //修改
+    function updateWarningPhone(){
+        var phone = $("#warningPhone").val();
+        var id = $("#warningId").val();
+
+        if(phone.trim().length == 0)
+            return;
+
+        //请求数据
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            contentType : 'application/json',
+            //请求地址
+            url : '/config/redis/updatePhone?id='+id+"&warningPhone="+phone,
+            //请求成功
+            success : function(result) {
+                $(".select").find('.tips').eq(3).click();
+            }
+        });
+    }
     //取消修改topic
     function cancelUpdateRedis(){
         $(".select").find('.tips').eq(0).click();
@@ -371,7 +394,24 @@
             dataList('/config/topic/list',rule,"#topicList");
 
         }
-        function warningOnload(){}
+        function warningOnload(){
+
+            //请求数据
+            $.ajax({
+                //请求方式
+                type : "GET",
+                //请求的媒体类型
+                contentType : 'application/json',
+                //请求地址
+                url : '/config/redis/list',
+                //请求成功
+                success : function(result) {
+                    $("#warningPhone").val(result.data[0].warningPhone);
+                    $("#warningId").val(result.data[0].id);
+
+                }
+            });
+        }
 
         //默认调用异常redis配置加载
         redisOnload();

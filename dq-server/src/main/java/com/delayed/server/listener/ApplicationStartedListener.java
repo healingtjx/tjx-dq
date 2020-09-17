@@ -22,6 +22,7 @@ import java.util.List;
 @Component
 public class ApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent> {
 
+
     @Autowired
     private DqRedisConfigRepository dqRedisConfigRepository;
 
@@ -47,6 +48,9 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     @Value("${delayed.consume.speed}")
     private int consumeSpeed;
 
+    @Value("${warning.phone}")
+    private String warningPhone;
+
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         try {
@@ -62,6 +66,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
                 dqRedisConfig.setConsumeSpeed(consumeSpeed);
                 dqRedisConfig.setTimer(timer);
                 dqRedisConfig.setTimerSpeed(timerSpeed);
+                dqRedisConfig.setWarningPhone(warningPhone);
                 dqRedisConfigRepository.save(dqRedisConfig);
                 return;
             }
@@ -78,6 +83,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             newDq.setConsume(consume);
             newDq.setConsumeSpeed(consumeSpeed);
             newDq.setTimer(timer);
+            newDq.setWarningPhone(warningPhone);
             newDq.setTimerSpeed(timerSpeed);
             //其他连接状态这个版本暂时不处理
             newDq.setVserion("未知");

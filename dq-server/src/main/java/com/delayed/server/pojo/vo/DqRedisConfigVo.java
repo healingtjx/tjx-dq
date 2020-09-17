@@ -21,7 +21,6 @@ public class DqRedisConfigVo {
     /**
      * consume 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="consume_speed")
     private int consumeSpeed;
 
 
@@ -33,6 +32,7 @@ public class DqRedisConfigVo {
     /**
      * timer 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="timer_speed")
     private int timerSpeed;
+
+
 }
