@@ -10,7 +10,7 @@ import org.sqlite.SQLiteDataSource;
 import javax.sql.DataSource;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: 数据库配置
  * @创建时间: 创建于15:34 2020/7/14
  **/
@@ -20,7 +20,8 @@ public class DataSourceConfig {
 
 
     @Value("${data.source.url}")
-    private String sourceUrl ;
+    private String sourceUrl;
+
     @Bean(destroyMethod = "", name = "EmbeddedDataSource")
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();

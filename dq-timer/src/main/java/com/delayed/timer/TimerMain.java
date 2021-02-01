@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于14:03 2020/7/29
  **/
@@ -14,6 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class TimerMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(TimerMain.class,args);
+        SpringApplication.run(TimerMain.class, args);
     }
 }

@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
 
 </head>
 
@@ -24,7 +24,7 @@
             <div class="tips" data-page='page_warning'>警报设置</div>
         </div>
         <!-- redis 配置-->
-        <div class="page page_redis" >
+        <div class="page page_redis">
             <div class="list_redis">
                 <table width="100%" class="table">
                     <thead>
@@ -53,35 +53,35 @@
             <div class="add_topic">
                 <div class="row">
                     <span class="name">名称</span>
-                    <input class="value" placeholder="请输入名称" />
+                    <input class="value" placeholder="请输入名称"/>
                 </div>
                 <div class="row">
                     <span class="name">topic</span>
-                    <input class="value" placeholder="请输入topic" />
+                    <input class="value" placeholder="请输入topic"/>
                 </div>
                 <div class="row">
                     <span class="name">延迟时间:(单位秒)</span>
-                    <input class="value" placeholder="请输入延迟时间" />
+                    <input class="value" placeholder="请输入延迟时间"/>
                 </div>
                 <div class="row">
                     <span class="name">回调通知url</span>
-                    <input class="value" placeholder="请输入地址" />
+                    <input class="value" placeholder="请输入地址"/>
                 </div>
                 <div class="row">
                     <span class="name">成功状态</span>
-                    <input class="value" placeholder="" />
+                    <input class="value" placeholder=""/>
                 </div>
                 <div class="row">
                     <span class="name">超时时间</span>
-                    <input class="value" placeholder="请输入超时时间" />
+                    <input class="value" placeholder="请输入超时时间"/>
                 </div>
                 <div class="row">
                     <span class="name">异常通知</span>
-                    <input class="value" placeholder="请输入邮箱地址" />
+                    <input class="value" placeholder="请输入邮箱地址"/>
                 </div>
                 <div class="row">
                     <span class="name">创建人</span>
-                    <input class="value" placeholder="请输入创建人" />
+                    <input class="value" placeholder="请输入创建人"/>
                 </div>
                 <div class="row">
                     <button onclick="topicAddSubmit()" class="btn" id="topicSubmit">提交</button>
@@ -114,8 +114,8 @@
             <div class="page_warning">
                 <div class="row">
                     <span class="name">警告通知电话号码</span>
-                    <input type="hidden" id="warningId" >
-                    <input class="value" id="warningPhone" placeholder="请输入警告通知电话号码" />
+                    <input type="hidden" id="warningId">
+                    <input class="value" id="warningPhone" placeholder="请输入警告通知电话号码"/>
                 </div>
                 <div class="row">
                     <button class="btn" onclick="updateWarningPhone()">提交</button>
@@ -129,22 +129,22 @@
 <script>
     //------------------------------工具类------------------------------
     //str:原始字符串，index,开始位置,changeStr，改变后的字
-    function changeStr(str,index,changeStr){
-        return str.substr(0, index) + changeStr+ str.substr(index + changeStr.length);
+    function changeStr(str, index, changeStr) {
+        return str.substr(0, index) + changeStr + str.substr(index + changeStr.length);
     }
 
     //渲染列表数据
-    function dataList(url,rule,obj){
+    function dataList(url, rule, obj) {
         //请求数据
         $.ajax({
             //请求方式
-            type : "GET",
+            type: "GET",
             //请求的媒体类型
             contentType: "application/json;charset=UTF-8",
             //请求地址
-            url : url,
+            url: url,
             //请求成功
-            success : function(result) {
+            success: function (result) {
                 //请空数据
                 var table = $(obj);
                 table.html("");
@@ -155,10 +155,10 @@
                     var trHTML = '<tr>';
                     for (var j = 0; j < rule.length; j++) {
                         var cur = rule[j];
-                        if(cur.type == 0){
-                            trHTML+='<td>'+data[cur.key]+'</td>';
-                        }else {
-                            trHTML+='<td data-id="'+ data.id +'">'+cur.value+'</td>';
+                        if (cur.type == 0) {
+                            trHTML += '<td>' + data[cur.key] + '</td>';
+                        } else {
+                            trHTML += '<td data-id="' + data.id + '">' + cur.value + '</td>';
                         }
                     }
                     trHTML += '</tr>';
@@ -173,37 +173,39 @@
     //------------------------------业务提交代码--------------------------
 
     //修改
-    function updateWarningPhone(){
+    function updateWarningPhone() {
         var phone = $("#warningPhone").val();
         var id = $("#warningId").val();
 
-        if(phone.trim().length == 0)
+        if (phone.trim().length == 0)
             return;
 
         //请求数据
         $.ajax({
             //请求方式
-            type : "POST",
+            type: "POST",
             //请求的媒体类型
-            contentType : 'application/json',
+            contentType: 'application/json',
             //请求地址
-            url : '/config/redis/updatePhone?id='+id+"&warningPhone="+phone,
+            url: '/config/redis/updatePhone?id=' + id + "&warningPhone=" + phone,
             //请求成功
-            success : function(result) {
+            success: function (result) {
                 $(".select").find('.tips').eq(3).click();
             }
         });
     }
+
     //取消修改topic
-    function cancelUpdateRedis(){
+    function cancelUpdateRedis() {
         $(".select").find('.tips').eq(0).click();
     }
+
     //确认修改topic
-    function confirmUpdateRedis(e){
+    function confirmUpdateRedis(e) {
         var id = $(e).parent().attr("data-id");
-        var rows =  $(e).parents('tr').find('td');
+        var rows = $(e).parents('tr').find('td');
         var reqData = {
-            id:id,
+            id: id,
             timer: rows.eq(2).find('input').val(),
             timerSpeed: rows.eq(3).find('input').val(),
             consume: rows.eq(4).find('input').val(),
@@ -213,28 +215,30 @@
         //请求数据
         $.ajax({
             //请求方式
-            type : "POST",
+            type: "POST",
             //请求的媒体类型
-            contentType : 'application/json',
+            contentType: 'application/json',
             //请求地址
-            url : '/config/redis/update',
+            url: '/config/redis/update',
             data: JSON.stringify(reqData),
             //请求成功
-            success : function(result) {
+            success: function (result) {
                 $(".select").find('.tips').eq(0).click();
             }
         });
     }
+
     //取消修改topic
-    function cancelUpdateTopic(){
+    function cancelUpdateTopic() {
         $(".select").find('.tips').eq(2).click();
     }
+
     //确认修改topic
-    function confirmUpdateTopic(e){
+    function confirmUpdateTopic(e) {
         var id = $(e).parent().attr("data-id");
-        var rows =  $(e).parents('tr').find('td');
+        var rows = $(e).parents('tr').find('td');
         var reqData = {
-            id:id,
+            id: id,
             name: rows.eq(0).find('input').val(),
             topic: rows.eq(1).find('input').val(),
             delayTime: rows.eq(2).find('input').val(),
@@ -247,23 +251,23 @@
         //请求数据
         $.ajax({
             //请求方式
-            type : "POST",
+            type: "POST",
             //请求的媒体类型
-            contentType : 'application/json',
+            contentType: 'application/json',
             //请求地址
-            url : '/config/topic/add',
+            url: '/config/topic/add',
             data: JSON.stringify(reqData),
             //请求成功
-            success : function(result) {
+            success: function (result) {
                 $(".select").find('.tips').eq(2).click();
             }
         });
     }
 
     //修改redis
-    function updateRedis(e){
+    function updateRedis(e) {
         //如果有正在修改的
-        if($("#redisList").find('.update_input').length>0){
+        if ($("#redisList").find('.update_input').length > 0) {
             confirm("请完成现有的修改！")
             return;
         }
@@ -274,17 +278,18 @@
         for (var i = 2; i < 6; i++) {
             var td = tds.eq(i);
             var html = td.html();
-            td.html("<input class='update_input' value='"+html+"' />");
+            td.html("<input class='update_input' value='" + html + "' />");
         }
         //最后一个直接改成确定
-        var lastTd = tds.eq(tds.length-1);
+        var lastTd = tds.eq(tds.length - 1);
         lastTd.html("<a href='javascript:void(0)' onclick='confirmUpdateRedis(this)'>确认</a>  <a href='javascript:void(0)' onclick='cancelUpdateRedis(this)'>取消</a>")
 
     }
+
     //修改topic
-    function updateTopic(e){
+    function updateTopic(e) {
         //如果有正在修改的
-        if($("#topicList").find('.update_input').length>0){
+        if ($("#topicList").find('.update_input').length > 0) {
             confirm("请完成现有的修改！")
             return;
         }
@@ -294,28 +299,29 @@
         for (var i = 0; i < tds.length - 1; i++) {
             var td = tds.eq(i);
             var html = td.html();
-            td.html("<input class='update_input' value='"+html+"' />");
+            td.html("<input class='update_input' value='" + html + "' />");
         }
         //最后一个直接改成确定
-        var lastTd = tds.eq(tds.length-1);
+        var lastTd = tds.eq(tds.length - 1);
         lastTd.html("<a href='javascript:void(0)' onclick='confirmUpdateTopic(this)'>确认</a>  <a href='javascript:void(0)' onclick='cancelUpdateTopic(this)'>取消</a>")
 
     }
+
     //删除topic
-    function delTopic(e){
+    function delTopic(e) {
         //获取id
         var id = $(e).parent().attr("data-id");
-        if(confirm("确定删除该topic?")){
+        if (confirm("确定删除该topic?")) {
             //请求数据
             $.ajax({
                 //请求方式
-                type : "POST",
+                type: "POST",
                 //请求的媒体类型
-                contentType : 'application/json',
+                contentType: 'application/json',
                 //请求地址
-                url : '/config/topic/del?id='+id,
+                url: '/config/topic/del?id=' + id,
                 //请求成功
-                success : function(result) {
+                success: function (result) {
                     $(".select").find('.tips').eq(2).click();
                 }
             });
@@ -324,7 +330,7 @@
     }
 
     //添加topic
-    function topicAddSubmit(){
+    function topicAddSubmit() {
         var rows = $(".add_topic").find('.row');
         var reqData = {
             name: rows.eq(0).find('input').val(),
@@ -339,73 +345,80 @@
         //请求数据
         $.ajax({
             //请求方式
-            type : "POST",
+            type: "POST",
             //请求的媒体类型
-            contentType : 'application/json',
+            contentType: 'application/json',
             //请求地址
-            url : '/config/topic/add',
+            url: '/config/topic/add',
             data: JSON.stringify(reqData),
             //请求成功
-            success : function(result) {
+            success: function (result) {
                 $(".select").find('.tips').eq(2).click();
                 //清空input
                 var rows = $(".add_topic").find('.row');
-                for (var i = 0; i <rows.length ; i++) {
+                for (var i = 0; i < rows.length; i++) {
                     rows.eq(i).find('input').val("");
                 }
             }
         });
     }
+
     //------------------------------业务代码------------------------------
-    $(function() {
-        function redisOnload(){
-            var rule =[
-                {index:0,type:0,key:"name"},
-                {index:0,type:0,key:"url"},
-                {index:0,type:0,key:"timer"},
-                {index:0,type:0,key:"timerSpeed"},
-                {index:0,type:0,key:"consume"},
-                {index:0,type:0,key:"consumeSpeed"},
-                {index:0,type:0,key:"vserion"},
-                {index:0,type:1,value:"修改配置文件并且重启所有实例"},
-                {index:0,type:1,value:"<a href='javascript:void(0)' onclick='updateRedis(this)'>修改</a>"}
+    $(function () {
+        function redisOnload() {
+            var rule = [
+                {index: 0, type: 0, key: "name"},
+                {index: 0, type: 0, key: "url"},
+                {index: 0, type: 0, key: "timer"},
+                {index: 0, type: 0, key: "timerSpeed"},
+                {index: 0, type: 0, key: "consume"},
+                {index: 0, type: 0, key: "consumeSpeed"},
+                {index: 0, type: 0, key: "vserion"},
+                {index: 0, type: 1, value: "修改配置文件并且重启所有实例"},
+                {index: 0, type: 1, value: "<a href='javascript:void(0)' onclick='updateRedis(this)'>修改</a>"}
             ]
             //渲染数据
-            dataList('/config/redis/list',rule,"#redisList");
+            dataList('/config/redis/list', rule, "#redisList");
 
         }
 
-        function topicAddOnload(){
+        function topicAddOnload() {
 
         }
-        function topicListOnload(){
-            var rule =[
-                {index:0,type:0,key:"name"},
-                {index:0,type:0,key:"topic"},
-                {index:0,type:0,key:"delayTime"},
-                {index:0,type:0,key:"callBack"},
-                {index:0,type:0,key:"retryMark"},
-                {index:0,type:0,key:"overTime"},
-                {index:0,type:0,key:"exceptionBack"},
-                {index:0,type:0,key:"creator"},
-                {index:0,type:1,value:"<a href='javascript:void(0)' onclick='delTopic(this)'>删除</a>  <a href='javascript:void(0)' onclick='updateTopic(this)'>修改</a>"}
+
+        function topicListOnload() {
+            var rule = [
+                {index: 0, type: 0, key: "name"},
+                {index: 0, type: 0, key: "topic"},
+                {index: 0, type: 0, key: "delayTime"},
+                {index: 0, type: 0, key: "callBack"},
+                {index: 0, type: 0, key: "retryMark"},
+                {index: 0, type: 0, key: "overTime"},
+                {index: 0, type: 0, key: "exceptionBack"},
+                {index: 0, type: 0, key: "creator"},
+                {
+                    index: 0,
+                    type: 1,
+                    value: "<a href='javascript:void(0)' onclick='delTopic(this)'>删除</a>  <a href='javascript:void(0)' onclick='updateTopic(this)'>修改</a>"
+                }
             ]
             //渲染数据
-            dataList('/config/topic/list',rule,"#topicList");
+            dataList('/config/topic/list', rule, "#topicList");
 
         }
-        function warningOnload(){
+
+        function warningOnload() {
 
             //请求数据
             $.ajax({
                 //请求方式
-                type : "GET",
+                type: "GET",
                 //请求的媒体类型
-                contentType : 'application/json',
+                contentType: 'application/json',
                 //请求地址
-                url : '/config/redis/list',
+                url: '/config/redis/list',
                 //请求成功
-                success : function(result) {
+                success: function (result) {
                     $("#warningPhone").val(result.data[0].warningPhone);
                     $("#warningId").val(result.data[0].id);
 
@@ -416,23 +429,23 @@
         //默认调用异常redis配置加载
         redisOnload();
         //菜单监听事件
-        $(".select").find('.tips').click(function (){
+        $(".select").find('.tips').click(function () {
             //css改变
-            $('.tips').attr("class",'tips')
-            $(this).attr("class","tips active");
+            $('.tips').attr("class", 'tips')
+            $(this).attr("class", "tips active");
             //内容切换
-            $('.page').css('display','none');
+            $('.page').css('display', 'none');
             var page = $(this).attr('data-page');
-            $('.'+page).css('display','block')
+            $('.' + page).css('display', 'block')
             //调用加载事件
-            var pageName = page.substring(page.indexOf('_')+1);
-            if(pageName.indexOf('_')!= -1){
-                var index = pageName.indexOf('_')+1;
-                pageName = changeStr(pageName,index,(pageName.charAt(index).toLocaleUpperCase()));
-                pageName = pageName.replace('_','');
+            var pageName = page.substring(page.indexOf('_') + 1);
+            if (pageName.indexOf('_') != -1) {
+                var index = pageName.indexOf('_') + 1;
+                pageName = changeStr(pageName, index, (pageName.charAt(index).toLocaleUpperCase()));
+                pageName = pageName.replace('_', '');
             }
             //执行加载函数
-            eval(pageName+"Onload()");
+            eval(pageName + "Onload()");
 
         });
     });

@@ -3,7 +3,7 @@ package com.delayed.base.bean;
 import lombok.Data;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: 存入reids 的 job
  * @创建时间: 创建于14:01 2020/9/7
  **/

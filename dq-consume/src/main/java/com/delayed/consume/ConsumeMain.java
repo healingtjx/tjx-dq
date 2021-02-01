@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: 消费者启动类
  * @创建时间: 创建于14:26 2020/9/9
  **/
@@ -14,6 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class ConsumeMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(ConsumeMain.class,args);
+        SpringApplication.run(ConsumeMain.class, args);
     }
 }

@@ -3,7 +3,7 @@ package com.delayed.server.pojo.vo;
 import lombok.Data;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于11:26 2020/9/7
  **/

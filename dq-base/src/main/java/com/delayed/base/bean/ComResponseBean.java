@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: 返回结果类
  * @创建时间: 创建于16:24 2020/7/16
  **/

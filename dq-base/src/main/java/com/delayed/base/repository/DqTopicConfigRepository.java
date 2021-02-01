@@ -9,13 +9,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于19:31 2020/7/15
  **/
 @Component
 public interface DqTopicConfigRepository extends CrudRepository<DqTopicConfig, Long> {
 
+    /**
+     * 根据topic查询
+     *
+     * @param topic
+     * @return
+     */
     @Query("select t from DqTopicConfig t where t.topic = :topic  ")
     List<DqTopicConfig> findByTopic(@Param("topic") String topic);
 }

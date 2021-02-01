@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于16:54 2020/7/16
  **/
@@ -18,7 +18,7 @@ public class DqTopicConfig {
     private Long id;
 
     /**
-     *  名称
+     * 名称
      */
     private String name;
 
@@ -65,7 +65,6 @@ public class DqTopicConfig {
      */
     @Column(name = "exception_back")
     private String exceptionBack;
-
 
 
 }

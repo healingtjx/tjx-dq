@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: server 服务启动类
  * @创建时间: 创建于15:11 2020/7/14
  **/
@@ -21,7 +21,7 @@ public class ServerMain extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(ServerMain.class,args);
+        SpringApplication.run(ServerMain.class, args);
     }
 
 }

@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: jpa 配置
  * @创建时间: 创建于16:19 2020/7/14
  **/

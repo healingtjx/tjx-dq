@@ -1,9 +1,9 @@
 package com.delayed.server.listener;
 
-import com.delayed.base.utils.DelayBucketUtils;
-import com.delayed.base.utils.RedisUtils;
 import com.delayed.base.model.DqRedisConfig;
 import com.delayed.base.repository.DqRedisConfigRepository;
+import com.delayed.base.utils.DelayBucketUtils;
+import com.delayed.base.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于15:05 2020/9/3
  **/
@@ -27,7 +27,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     private DqRedisConfigRepository dqRedisConfigRepository;
 
     @Value("${redis.delayed.name}")
-    private String delayedName ;
+    private String delayedName;
 
     @Value("${redis.delayed.url}")
     private String url;
@@ -57,7 +57,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             //修改数据库
             List<DqRedisConfig> configs = dqRedisConfigRepository.findByUrl(url);
             //如果找到配置相同的 不做任何操作
-            if(configs.size()>0){
+            if (configs.size() > 0) {
                 //修改
                 DqRedisConfig dqRedisConfig = configs.get(0);
                 dqRedisConfig.setName(delayedName);
@@ -75,7 +75,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             dqRedisConfigRepository.deleteAll();
             //2.添加当前配置
             DqRedisConfig newDq = new DqRedisConfig();
-            newDq.setId(1l);
+            newDq.setId(1L);
             newDq.setUrl(url);
             newDq.setName(delayedName);
             newDq.setBucket(bucket);
@@ -88,22 +88,21 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
             //其他连接状态这个版本暂时不处理
             newDq.setVserion("未知");
             dqRedisConfigRepository.save(newDq);
-        }finally {
+        } finally {
             //实例化redis
             RedisUtils.initialize(url);
             //实例化DelayBucket
             DelayBucketUtils.initialize(bucket);
             //判断是否连接成功
-            if(RedisUtils.checkStatus()){
+            if (RedisUtils.checkStatus()) {
                 //打印成功信息
-                log.info("redis实例化成功:当前名称:"+delayedName+"\t当前url:"+url);
-            }else {
+                log.info("redis实例化成功:当前名称:" + delayedName + "\t当前url:" + url);
+            } else {
                 //抛出异常
                 throw new RuntimeException("redis实例化失败，请认真检测配置的redis(url格式:host:port:auth)");
 
             }
         }
-
 
 
     }

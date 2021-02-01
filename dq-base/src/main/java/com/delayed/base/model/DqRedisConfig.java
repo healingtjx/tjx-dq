@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述:
  * @创建时间: 创建于19:25 2020/7/15
  **/
@@ -48,7 +48,7 @@ public class DqRedisConfig {
     private String vserion;
 
     /**
-     *  consume 个数
+     * consume 个数
      */
     private int consume;
 
@@ -56,7 +56,7 @@ public class DqRedisConfig {
     /**
      * consume 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="consume_speed")
+    @Column(name = "consume_speed")
     private int consumeSpeed;
 
 
@@ -68,7 +68,7 @@ public class DqRedisConfig {
     /**
      * timer 扫描速度(单位毫秒) 默认 2毫秒
      */
-    @Column(name="timer_speed")
+    @Column(name = "timer_speed")
     private int timerSpeed;
 
 

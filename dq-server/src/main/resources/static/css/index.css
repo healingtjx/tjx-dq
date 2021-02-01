@@ -3,6 +3,7 @@ table {
     margin: 0 auto;
     text-align: center;
 }
+
 table td,
 table th {
     border: 1px solid #e4e4e4;
@@ -118,18 +119,18 @@ table tr:nth-child(even) {
     cursor: pointer;
 }
 
-.list_redis{
+.list_redis {
     margin-top: 40px;
 }
 
-.add_topic ,.page_warning{
+.add_topic, .page_warning {
     margin-top: 20px;
 }
 
-.page_topic_list{
+.page_topic_list {
     margin-top: 40px;
 }
 
-.update_input{
+.update_input {
     width: 96%;
 }

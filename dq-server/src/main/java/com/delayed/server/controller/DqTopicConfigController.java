@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @作者: tjx
+ * @author: tjx
  * @描述: top 配置信息操作
  * @创建时间: 创建于16:22 2020/7/16
  **/
@@ -23,25 +23,27 @@ public class DqTopicConfigController {
 
     /**
      * redis列表
+     *
      * @return
      */
     @GetMapping("/list")
-    public ComResponseBean list(){
+    public ComResponseBean list() {
         return dqTopicConfigService.list();
     }
 
     /**
      * 添加
+     *
      * @param dqTopicConfig
      * @return
      */
     @PostMapping("/add")
-    public ComResponseBean add(@RequestBody DqTopicConfig dqTopicConfig){
+    public ComResponseBean add(@RequestBody DqTopicConfig dqTopicConfig) {
         return dqTopicConfigService.add(dqTopicConfig);
     }
 
     @PostMapping("/del")
-    public ComResponseBean del(int id){
+    public ComResponseBean del(int id) {
         return dqTopicConfigService.del(id);
     }
 }

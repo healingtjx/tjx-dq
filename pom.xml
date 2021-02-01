@@ -25,7 +25,6 @@
     </parent>
 
 
-
     <!--  公共类库 -->
     <dependencies>
         <!--lombok 简化get/set-->

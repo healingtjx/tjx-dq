@@ -2,18 +2,18 @@ package com.delayed.server.pojo.vo;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
 /**
- * redis 修改 VO
- */
+ * @author: tjx
+ * @描述: redis 修改 VO
+ * @创建时间: 创建于15:05 2020/9/3
+ **/
 @Data
 public class DqRedisConfigVo {
 
     private Long id;
 
     /**
-     *  consume 个数
+     * consume 个数
      */
     private int consume;
 
