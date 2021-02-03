@@ -9,8 +9,7 @@ import com.delayed.base.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author: tjx
@@ -29,7 +28,9 @@ public class HandleConsumeTask extends TimerTask {
     public HandleConsumeTask(DqTopicConfigRepository dqTopicConfigRepository, NotifyService notifyService) {
         this.dqTopicConfigRepository = dqTopicConfigRepository;
         this.notifyService = notifyService;
-        cachedThreadPool = Executors.newCachedThreadPool();
+        cachedThreadPool = new ThreadPoolExecutor(20, 50,
+                60L, TimeUnit.SECONDS,
+                new SynchronousQueue<>(),new HandleThreadFactory("ConsumeTask"));
     }
 
     @Override
@@ -57,6 +58,9 @@ public class HandleConsumeTask extends TimerTask {
         }
         //消费
         log.info("开始消费" + "\t" + jobStr);
+        long s = System.currentTimeMillis();
         cachedThreadPool.execute(new HandeCalByHttpTask(job, dqTopicConfigRepository, notifyService));
+        long e = System.currentTimeMillis();
+        log.info("丢入线程池时间: "+(e-s)+"ms");
     }
 }

@@ -43,6 +43,7 @@ public class TopicService {
         DqTopicConfig dqTopicConfig = topicConfigs.get(0);
         //判断操作
         String cmd = topic.getCmd();
+        log.info("TopicVo:"+JSON.toJSONString(topic));
         switch (cmd) {
             case "add": {
                 //3.存入 job pool

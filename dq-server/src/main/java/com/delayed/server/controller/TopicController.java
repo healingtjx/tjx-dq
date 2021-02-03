@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 
 /**
  * @author: tjx
@@ -32,6 +34,16 @@ public class TopicController {
         return topicService.submit(topicVo);
     }
 
+
+    @PostMapping("/randomSubmit")
+    public ComResponseBean submit() {
+        TopicVo topicVo = new TopicVo();
+        topicVo.setTopic("test");
+        topicVo.setCmd("add");
+        topicVo.setBody("{'test':123}");
+        topicVo.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        return topicService.submit(topicVo);
+    }
 
     @RequestMapping("/callBack")
     public ComResponseBean callBack(String id, String test) {

@@ -76,10 +76,11 @@ public class HandeCalByHttpTask implements Runnable {
             String content = "";
             String body = job.getBody();
             if (StringUtil.isNotNull(body)) {
-                HashMap<String, String> parameters = JSON.parseObject(body, HashMap.class);
+                log.info("body:"+body);
+                HashMap<String, Object> parameters = JSON.parseObject(body, HashMap.class);
                 if (null != parameters && parameters.size() > 0) {
-                    for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                        content += "&" + entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "utf-8");
+                    for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+                        content += "&" + entry.getKey() + "=" + URLEncoder.encode(entry.getValue().toString(), "utf-8");
                     }
                     DataOutputStream out = new DataOutputStream(conn
                             .getOutputStream());
